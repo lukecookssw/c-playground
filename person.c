@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "memory_utils.h"
+#include "utils/memory_utils.h"
 
 // Declare initializePerson as static
 static void initializePerson(struct Person *person) {

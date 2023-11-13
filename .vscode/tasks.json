@@ -9,7 +9,8 @@
                 "-g",
                 "${workspaceFolder}/main.c",
                 "${workspaceFolder}/person.c",
-                "${workspaceFolder}/memory_utils.c",
+                "${workspaceFolder}/utils/memory_utils.c",
+                "${workspaceFolder}/utils/file_utils.c",
                 "-o",
                 "${fileDirname}/${fileBasenameNoExtension}"
             ],
