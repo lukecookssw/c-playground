@@ -1,22 +1,21 @@
+// main.c
 #include <stdio.h>
-#include <stdbool.h> // needed for booleans, otherwise we'd have to use 
+#include <stdlib.h>
 
-int add(int i, int j)
-{
-    return i + j;
-}
+#include "person.h"
 
-// C general data types: char, int, float, double
 
 
 int main() {
-    printf("Hello, World!\n");
-    
-    int i = 10;
-    int j = 5;
-    int k = add(i, j);
-    printf("%d\n", k);
-    
+    // Create a new Person using createPerson
+    struct Person *person1 = createPerson();
+
+    // Using the initialized Person
+    printf("Person's name: %s\n", person1->name);
+    printf("Person's age: %d\n", person1->age);
+
+    // Free the allocated memory when done
+    free(person1);
+
     return 0;
 }
-
