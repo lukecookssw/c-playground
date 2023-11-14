@@ -7,6 +7,6 @@
 #include <stdio.h>
 
 // Function declaration
-void *safeMalloc(size_t size);
+void *safe_malloc(size_t size);
 
 #endif // MEMORY_UTILS_H

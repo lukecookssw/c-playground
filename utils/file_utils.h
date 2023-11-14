@@ -7,6 +7,7 @@
 #include <stdio.h>
 
 // Function declaration
-FILE *safefopen(const char *path, const char *mode);
+FILE *safe_fopen(const char *path, const char *mode);
+void safe_fclose(FILE *fp);
 
 #endif // FILE_UTILS_H

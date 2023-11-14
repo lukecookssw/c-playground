@@ -7,10 +7,20 @@
             "args": [
                 "-fdiagnostics-color=always",
                 "-g",
+                
+                // code
                 "${workspaceFolder}/main.c",
-                "${workspaceFolder}/person.c",
+                
+                // types
+                "${workspaceFolder}/character/player_character.c",
+                "${workspaceFolder}/character/attribute.c",
+                
+                // utilities
                 "${workspaceFolder}/utils/memory_utils.c",
                 "${workspaceFolder}/utils/file_utils.c",
+                "${workspaceFolder}/utils/string_utils.c",
+                "${workspaceFolder}/utils/save_utils.c",
+                
                 "-o",
                 "${fileDirname}/${fileBasenameNoExtension}"
             ],

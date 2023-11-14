@@ -12,3 +12,11 @@ FILE *safefopen(const char *path, const char *mode)
     }
     return fp;
 }
+
+void safe_fclose(FILE *fp)
+{
+    if (fclose(fp) != 0) {
+        perror("Error closing file");
+        exit(EXIT_FAILURE);
+    }
+}
