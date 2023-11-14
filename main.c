@@ -2,11 +2,12 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <termios.h>
+#include <string.h>
 
 #include <sys/time.h>
 #include <sys/types.h>
 
-
+#include "person.h"
 #include "utils/memory_utils.h"
 #include "utils/file_utils.h"
 
@@ -103,11 +104,17 @@ int main() {
     int foo = 21;
     ptr = &foo;
     *ptr = 22;
-    
+
     // There is no reference type like this in C (only C++)
     //int& ref = var;
     int* ref = &var; // Same thing as int* ptr
     
+    struct Person person;
+    createPerson(&person);
+    strcpy(person.name, "Bob");
+    person.age = 21;
+    printf("Person: %s\n", person.name);
+
     printf("var: %d\n", var);
     printf("foo: %d\n", foo);
     printf("ptr: %d\n", *ptr);
