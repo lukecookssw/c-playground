@@ -28,3 +28,4 @@ char* toUpperCaseCopy(char* str)
     // return the new string
     return result;
 }
+

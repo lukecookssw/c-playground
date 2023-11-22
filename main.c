@@ -1,18 +1,29 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "character/attribute.h"
 #include "character/player_character.h"
 #include "utils/save_utils.h"
 #include "utils/string_utils.h"
 
-void request_attr(char* attr_name, int* attr_val)
+char Y = 'Y';
+char N = 'N';
+
+void request_attr(char *attr_name, int *attr_val)
 {
+    int minVal = 6;
+    int maxVal = 18;
     printf("What is your character's %s score? ", attr_name);
-    scanf("%d", attr_val);
+    while (scanf("%d", attr_val) != 1 || *attr_val < minVal || *attr_val > maxVal)
+    {
+        while (getchar() != '\n')
+            ; // clear the input buffer
+        printf("Invalid input. Enter a number between %d and %d: ", minVal, maxVal);
+    }
 }
 
-void set_attributes(struct PlayerCharacter* pc, int scores[6])
+void set_attributes(struct PlayerCharacter *pc, int scores[6])
 {
     updateAttribute(&pc->strength, scores[0]);
     updateAttribute(&pc->dexterity, scores[1]);
@@ -22,13 +33,13 @@ void set_attributes(struct PlayerCharacter* pc, int scores[6])
     updateAttribute(&pc->charisma, scores[5]);
 }
 
-struct PlayerCharacter* create_character_form()
+struct PlayerCharacter *create_character_form()
 {
     // ask the user to type in their character's name
     char name[32];
     printf("What is your character's name? ");
-    scanf("%s", name);
-    
+    fgets(name, sizeof(name), stdin);
+
     // get the attribute scores
     int attrs[6];
     request_attr("strength", &attrs[0]);
@@ -39,14 +50,14 @@ struct PlayerCharacter* create_character_form()
     request_attr("charisma", &attrs[5]);
 
     // create the player character
-    struct PlayerCharacter* pc = create_player_character(name);
+    struct PlayerCharacter *pc = create_player_character(name);
     // update the attributes
     set_attributes(pc, attrs);
 
     return pc;
 }
 
-void print_character(struct PlayerCharacter* pc)
+void print_character(struct PlayerCharacter *pc)
 {
     printf("Name: %s\n", pc->name);
     printf("Attribute\tScore\tModifier\n");
@@ -58,26 +69,105 @@ void print_character(struct PlayerCharacter* pc)
     printf("Charisma\t%d\t%c%d\n", pc->charisma.attr_val, pc->charisma.attr_mod >= 0 ? '+' : '-', abs(pc->charisma.attr_mod));
 }
 
-char request_save(struct PlayerCharacter* pc)
+char request_save(struct PlayerCharacter *pc)
 {
-    printf("Would you like to save your character? (y/n) ");
-    char save;
-    scanf(" %c", &save);
-    
-    return save;
+    printf("Would you like to save your character? (Y/n) ");
+    char save[3]; // buffer to hold the input
+    fgets(save, sizeof(save), stdin);
+    toUpperCase(save);
+    if (save[0] == '\n')
+    {
+        // User just hit enter, return a default value
+        return Y;
+    }
+    else if (save[0] == Y || save[0] == N)
+    {
+        // User entered 'y' or 'n'
+        return save[0];
+    }
+    else
+    {
+        // Invalid input, you could ask again or return a default value
+        printf("Invalid input. Please enter 'y' or 'n'.\n");
+        return request_save(pc);
+    }
 }
 
-int main() {
-    
-    struct PlayerCharacter* pc = create_character_form();
-    
-    print_character(pc);
-    char save;
-    save = request_save(pc);
-    
-    if (save == 'y') {
-        // save the character
-        save_character(pc);
+char request_load()
+{
+    printf("Load existing character? (Y/n)");
+    char load[3]; // buffer to hold the input
+    fgets(load, sizeof(load), stdin);
+    toUpperCase(load);
+    // check that they entered either nothing, or y/n
+    if (load[0] == '\n' || load[0] == Y)
+    {
+        return Y;
     }
+    else if (load[0] == N)
+    {
+        return N;
+    }
+    else
+    {
+        // Invalid input, you could ask again or return a default value
+        printf("Invalid input. Please enter 'y' or 'n'.\n");
+        return request_load();
+    }
+}
+
+void command_listener(struct PlayerCharacter *pc)
+{
+    char command[32];
+    while (1)
+    {
+        printf("Enter a command: ");
+        fgets(command, sizeof(command), stdin);
+        // Remove newline character
+        command[strcspn(command, "\n")] = '\0';
+
+        if (strcmp(command, "save") == 0)
+        {
+            // save the character
+            save_character(pc);
+        }
+        else if (strcmp(command, "exit") == 0)
+        {
+            break; // exit the loop
+        }
+        else
+        {
+            printf("Invalid command. Please enter 'save' or 'exit'.\n");
+        }
+    }
+}
+
+
+
+int main()
+{
+    struct PlayerCharacter *pc;
+
+    char load = request_load();
+    if (load == Y)
+    {
+        pc = load_character();
+    }
+    else
+    {
+        pc = create_character_form();
+    }
+
+    print_character(pc);
+
+    command_listener(pc);
+
+    // // --- OLD CODE ---
+    // char save = request_save(pc);
+    // if (save == Y)
+    // {
+    //     // save the character
+    //     save_character(pc);
+    // }
     return 0;
 }

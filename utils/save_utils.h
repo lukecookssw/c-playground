@@ -7,4 +7,6 @@
 
 void save_character(struct PlayerCharacter* pc);
 
+struct PlayerCharacter* load_character();
+
 #endif // SAVE_UTILS_H
