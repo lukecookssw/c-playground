@@ -18,5 +18,6 @@ extern CommandHandler command_handlers[];
 void handle_list(struct PlayerCharacter* pc);
 void handle_save(struct PlayerCharacter* pc);
 void handle_exit(struct PlayerCharacter* pc);
+void handle_attributes(struct PlayerCharacter* pc);
 
 #endif // COMMAND_MAP_H

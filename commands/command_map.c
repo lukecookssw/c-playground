@@ -26,11 +26,24 @@ void handle_exit(struct PlayerCharacter* pc) {
     exit(0);
 }
 
+void handle_attributes(struct  PlayerCharacter *pc)
+{
+    
+    printf("Strength:       %d\n", pc->strength.attr_val);
+    printf("Dexterity:      %d\n", pc->dexterity.attr_val);
+    printf("Constitution:   %d\n", pc->constitution.attr_val);
+    printf("Intelligence:   %d\n", pc->intelligence.attr_val);
+    printf("Wisdom:         %d\n", pc->wisdom.attr_val);
+    printf("Charisma:       %d\n", pc->charisma.attr_val);
+}
+
 
 // Define the command handlers
 CommandHandler command_handlers[] = {
     { "list", handle_list },
     { "save", handle_save },
+    { "stats", handle_attributes },
+    { "attributes", handle_attributes },
     { "exit", handle_exit },
     { NULL, NULL }
 };

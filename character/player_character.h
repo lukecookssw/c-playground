@@ -6,8 +6,7 @@
 struct PlayerCharacter
 {
     char name[32];
-    int level;
-
+    
     // TODO: Change these to an array of attributes
     struct Attribute strength;
     struct Attribute dexterity;

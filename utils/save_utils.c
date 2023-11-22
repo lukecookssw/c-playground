@@ -85,7 +85,7 @@ struct PlayerCharacter* load_character()
     // important:
     // pc is a pointer
     // pc->strength is a struct
-    // &pc->strength is a pointer to a struct (like tunnelling the pointer I guess?)
+    // &pc->strength is a pointer to a struct. Read it like this: &(ptr->struct_member)
 
 
     fscanf(fp, "%d", &attr_val);

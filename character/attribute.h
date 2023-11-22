@@ -10,11 +10,6 @@ struct Attribute {
 };
 
 // Function declarations
-struct Attribute *createAttribute();
 void updateAttribute(struct Attribute *attribute, int val);
-
-// Don't think I need this
-//void freeAttribute(struct Attribute *attribute);
-
 
 #endif // ATTRIBUTE_H
