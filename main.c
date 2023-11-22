@@ -22,6 +22,8 @@ void request_attr(char *attr_name, int *attr_val)
             ; // clear the input buffer
         printf("Invalid input. Enter a number between %d and %d: ", minVal, maxVal);
     }
+    while (getchar() != '\n')
+        ; // consume the newline character left by scanf
 }
 
 struct PlayerCharacter *new_character()
@@ -90,26 +92,30 @@ char request_save(struct PlayerCharacter *pc)
     }
 }
 
-char request_load()
+int request_load()
 {
-    printf("Load existing character? (Y/n)");
     char load[3]; // buffer to hold the input
-    fgets(load, sizeof(load), stdin);
-    toUpperCase(load);
-    // check that they entered either nothing, or y/n
-    if (load[0] == '\n' || load[0] == Y)
+
+    while (1)
     {
-        return Y;
-    }
-    else if (load[0] == N)
-    {
-        return N;
-    }
-    else
-    {
-        // Invalid input, you could ask again or return a default value
-        printf("Invalid input. Please enter 'y' or 'n'.\n");
-        return request_load();
+        printf("Load existing character? (Y/n)");
+        fgets(load, sizeof(load), stdin);
+        toUpperCase(load);
+
+        // check that they entered either nothing, or y/n
+        if (load[0] == '\n' || load[0] == Y)
+        {
+            return 1;
+        }
+        else if (load[0] == N)
+        {
+            return 0;
+        }
+        else
+        {
+            // Invalid input, ask again
+            printf("Invalid input. Please enter 'y' or 'n'.\n");
+        }
     }
 }
 
@@ -144,8 +150,8 @@ void command_listener(struct PlayerCharacter *pc)
 struct PlayerCharacter *initialize_session()
 {
     struct PlayerCharacter *pc;
-    char load = request_load();
-    if (load == Y)
+    int load = request_load();
+    if (load)
     {
         pc = load_character();
     }
@@ -161,5 +167,7 @@ int main()
     struct PlayerCharacter *pc = initialize_session();
     print_character(pc);
     command_listener(pc);
+    
+    request_save(pc); // ask to save on exit
     return 0;
 }
