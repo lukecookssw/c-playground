@@ -6,6 +6,7 @@
 #include "character/player_character.h"
 #include "utils/save_utils.h"
 #include "utils/string_utils.h"
+#include "commands/command_map.h"
 
 char Y = 'Y';
 char N = 'N';
@@ -23,17 +24,7 @@ void request_attr(char *attr_name, int *attr_val)
     }
 }
 
-void set_attributes(struct PlayerCharacter *pc, int scores[6])
-{
-    updateAttribute(&pc->strength, scores[0]);
-    updateAttribute(&pc->dexterity, scores[1]);
-    updateAttribute(&pc->constitution, scores[2]);
-    updateAttribute(&pc->intelligence, scores[3]);
-    updateAttribute(&pc->wisdom, scores[4]);
-    updateAttribute(&pc->charisma, scores[5]);
-}
-
-struct PlayerCharacter *create_character_form()
+struct PlayerCharacter *new_character()
 {
     // ask the user to type in their character's name
     char name[32];
@@ -51,8 +42,14 @@ struct PlayerCharacter *create_character_form()
 
     // create the player character
     struct PlayerCharacter *pc = create_player_character(name);
-    // update the attributes
-    set_attributes(pc, attrs);
+
+    // set the attributes
+    updateAttribute(&pc->strength, attrs[0]);
+    updateAttribute(&pc->dexterity, attrs[1]);
+    updateAttribute(&pc->constitution, attrs[2]);
+    updateAttribute(&pc->intelligence, attrs[3]);
+    updateAttribute(&pc->wisdom, attrs[4]);
+    updateAttribute(&pc->charisma, attrs[5]);
 
     return pc;
 }
@@ -119,35 +116,34 @@ char request_load()
 void command_listener(struct PlayerCharacter *pc)
 {
     char command[32];
+
     while (1)
     {
         printf("Enter a command: ");
         fgets(command, sizeof(command), stdin);
-        // Remove newline character
         command[strcspn(command, "\n")] = '\0';
 
-        if (strcmp(command, "save") == 0)
+        int i = 0;
+        while (command_handlers[i].name != NULL)
         {
-            // save the character
-            save_character(pc);
+            if (strcmp(command, command_handlers[i].name) == 0)
+            {
+                command_handlers[i].handler(pc);
+                break;
+            }
+            i++;
         }
-        else if (strcmp(command, "exit") == 0)
+
+        if (command_handlers[i].name == NULL)
         {
-            break; // exit the loop
-        }
-        else
-        {
-            printf("Invalid command. Please enter 'save' or 'exit'.\n");
+            printf("Invalid command. Please enter a valid command.\n");
         }
     }
 }
 
-
-
-int main()
+struct PlayerCharacter *initialize_session()
 {
     struct PlayerCharacter *pc;
-
     char load = request_load();
     if (load == Y)
     {
@@ -155,19 +151,15 @@ int main()
     }
     else
     {
-        pc = create_character_form();
+        pc = new_character();
     }
+    return pc;
+}
 
+int main()
+{
+    struct PlayerCharacter *pc = initialize_session();
     print_character(pc);
-
     command_listener(pc);
-
-    // // --- OLD CODE ---
-    // char save = request_save(pc);
-    // if (save == Y)
-    // {
-    //     // save the character
-    //     save_character(pc);
-    // }
     return 0;
 }

@@ -7,5 +7,7 @@
 // Function declaration
 void toUpperCase(char* str);
 char* toUpperCaseCopy(char* str);
+void toLowerCase(char* str);
+char* toLowerCaseCopy(char* str);
 
 #endif // MEMORY_UTILS_H

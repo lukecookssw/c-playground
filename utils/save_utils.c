@@ -9,16 +9,21 @@
 #include "save_utils.h"
 
 #include "memory_utils.h"
+#include "string_utils.h"
 #include "../character/player_character.h"
 
 void save_character(struct PlayerCharacter* pc)
 {
-    // check if there is already a file with the pc.name as the filename
-    char* filename = safe_malloc(strlen(pc->name) + 12); // allocate enough space for "save_files/" prefix and null terminator
-    sprintf(filename, "save_files/%s", pc->name);
+    char save_dir[] = "save_files/";
+    char* character_file = toLowerCaseCopy(pc->name);
+    int allocSize = sizeof(save_dir) + strlen(character_file); // using sizeof() includes the null-terminator so no need for +1
     
-    printf("character will be saved in %s\n", filename);
-    int fd = open(filename, O_WRONLY | O_CREAT | O_TRUNC, S_IRUSR | S_IWUSR); // open file for writing, create if it doesn't exist, truncate if it does
+    // check if there is already a file with the pc.name as the filename
+    char* full_filepath = safe_malloc(allocSize);
+    sprintf(full_filepath, "%s%s", save_dir, character_file);
+    
+    printf("character will be saved in %s\n", full_filepath);
+    int fd = open(full_filepath, O_WRONLY | O_CREAT | O_TRUNC, S_IRUSR | S_IWUSR); // open file for writing, create if it doesn't exist, truncate if it does
     if (fd == -1) {
         perror("open");
         exit(EXIT_FAILURE);
@@ -36,26 +41,30 @@ void save_character(struct PlayerCharacter* pc)
     fprintf(fp, "%d\n", pc->wisdom.attr_val);
     fprintf(fp, "%d\n", pc->charisma.attr_val);
     fclose(fp);
+
+    printf("Save successful!\n");
 }
 
 struct PlayerCharacter* load_character()
 {
-    // get the character name
-    char filename[32];
-    printf("What is the name of the character you want to load? ");
-    fgets(filename, sizeof(filename), stdin);
-
-    // Remove newline character
-    filename[strcspn(filename, "\n")] = '\0';
-
-    // check if there is already a file with the pc.name as the filename
-    char* full_filename = safe_malloc(strlen(filename) + 12); // allocate enough space for "save_files/" prefix and null terminator
-    sprintf(full_filename, "save_files/%s", filename);
+    char save_dir[] = "save_files/";
     
-    printf("current working directory: %s\n", getcwd(NULL, 0));
+    // get the character name
+    char character_file[32];
+    printf("Character name: ");
+    fgets(character_file, sizeof(character_file), stdin);
+    character_file[strcspn(character_file, "\n")] = '\0'; // Remove newline character
+    toLowerCase(character_file); // lower case the filename
+    
+    // get the full file path
+    int allocSize = sizeof(save_dir) + strlen(character_file);
+    char* full_filepath = safe_malloc(allocSize);
+    sprintf(full_filepath, "%s%s", save_dir, character_file);
 
-    printf("character will be loaded from %s\n", full_filename);
-    int fd = open(full_filename, O_RDONLY);
+    printf("Looking for %s\n", full_filepath);
+    
+    // open the file
+    int fd = open(full_filepath, O_RDONLY);
     if (fd == -1) {
         perror("open");
         exit(EXIT_FAILURE);
@@ -66,13 +75,9 @@ struct PlayerCharacter* load_character()
         perror("fdopen");
         exit(EXIT_FAILURE);
     }
+    struct PlayerCharacter* pc = create_player_character(character_file);
 
-    char name[32];
-    fgets(name, sizeof(name), fp);
-    name[strlen(name) - 1] = '\0'; // remove newline character
-
-    struct PlayerCharacter* pc = create_player_character(name);
-
+    
     fscanf(fp, "%d", &pc->strength.attr_val);
     fscanf(fp, "%d", &pc->dexterity.attr_val);
     fscanf(fp, "%d", &pc->constitution.attr_val);

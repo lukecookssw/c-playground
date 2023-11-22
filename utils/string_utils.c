@@ -29,3 +29,23 @@ char* toUpperCaseCopy(char* str)
     return result;
 }
 
+void toLowerCase(char* str)
+{
+    // convert name to all uppercase
+    for (int i = 0; i < strlen(str); i++) 
+    {
+        str[i] = tolower(str[i]);
+    }
+}
+char* toLowerCaseCopy(char* str)
+{
+    // allocate memory for the new string
+    char* result = safe_malloc(strlen(str) + 1);
+
+    // copy the string
+    strcpy(result, str);
+    toLowerCase(result);
+    // return the new string
+    return result;
+}
+
