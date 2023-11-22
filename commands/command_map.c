@@ -19,10 +19,11 @@ void handle_list(struct PlayerCharacter* pc)
 
 // Define the command handlers
 void handle_save(struct PlayerCharacter* pc) {
-    save_character(pc);
+    quicksave_character(pc);
 }
 
 void handle_exit(struct PlayerCharacter* pc) {
+    save_character(pc);
     exit(0);
 }
 

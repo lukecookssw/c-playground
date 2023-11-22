@@ -12,7 +12,38 @@
 #include "string_utils.h"
 #include "../character/player_character.h"
 
-void save_character(struct PlayerCharacter* pc)
+
+int confirm_save()
+{
+    char save[3]; // buffer to hold the input
+
+    while (1)
+    {
+        // ask the user if they want to save
+        printf("Would you like to save your character? (Y/n) ");
+        fgets(save, sizeof(save), stdin);
+        toUpperCase(save);
+
+        // evaluate response
+        if (save[0] == '\n' || save[0] == Y)
+        {
+            // Save the character
+            return 1;
+        }
+        else if (save[0] == N)
+        {
+            // User entered 'y' or 'n'
+            return 0;
+        }
+        else
+        {
+            // Invalid input, ask again
+            printf("Invalid input. Please enter 'y' or 'n'.\n");
+        }
+    }
+}
+
+void quicksave_character(struct PlayerCharacter *pc)
 {
     char save_dir[] = "save_files/";
     char* character_file = toLowerCaseCopy(pc->name);
@@ -43,6 +74,16 @@ void save_character(struct PlayerCharacter* pc)
     fclose(fp);
 
     printf("Save successful!\n");
+}
+
+
+void save_character(struct PlayerCharacter* pc)
+{
+    int save = confirm_save();
+    if (!save) {
+        return;
+    }
+    quicksave_character(pc);
 }
 
 struct PlayerCharacter* load_character()

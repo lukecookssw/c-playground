@@ -6,6 +6,7 @@
 #include "../character/player_character.h"
 
 void save_character(struct PlayerCharacter* pc);
+void quicksave_character(struct PlayerCharacter* pc);
 
 struct PlayerCharacter* load_character();
 

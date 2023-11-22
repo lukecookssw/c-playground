@@ -3,6 +3,8 @@
 #ifndef STRING_UTILS_H
 #define STRING_UTILS_H
 
+extern const char Y;
+extern const char N;
 
 // Function declaration
 void toUpperCase(char* str);

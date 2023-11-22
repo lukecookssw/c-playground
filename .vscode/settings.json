@@ -3,6 +3,7 @@
     "files.associations": {
         "memory_utils.h": "c",
         "string.h": "c",
-        "typeinfo": "c"
+        "typeinfo": "c",
+        "player_character.h": "c"
     }
 }

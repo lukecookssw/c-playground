@@ -8,8 +8,6 @@
 #include "utils/string_utils.h"
 #include "commands/command_map.h"
 
-char Y = 'Y';
-char N = 'N';
 
 void request_attr(char *attr_name, int *attr_val)
 {
@@ -68,27 +66,33 @@ void print_character(struct PlayerCharacter *pc)
     printf("Charisma\t%d\t%c%d\n", pc->charisma.attr_val, pc->charisma.attr_mod >= 0 ? '+' : '-', abs(pc->charisma.attr_mod));
 }
 
-char request_save(struct PlayerCharacter *pc)
+int request_save(struct PlayerCharacter *pc)
 {
-    printf("Would you like to save your character? (Y/n) ");
     char save[3]; // buffer to hold the input
-    fgets(save, sizeof(save), stdin);
-    toUpperCase(save);
-    if (save[0] == '\n')
+
+    while (1)
     {
-        // User just hit enter, return a default value
-        return Y;
-    }
-    else if (save[0] == Y || save[0] == N)
-    {
-        // User entered 'y' or 'n'
-        return save[0];
-    }
-    else
-    {
-        // Invalid input, you could ask again or return a default value
-        printf("Invalid input. Please enter 'y' or 'n'.\n");
-        return request_save(pc);
+        // ask the user if they want to save
+        printf("Would you like to save your character? (Y/n) ");
+        fgets(save, sizeof(save), stdin);
+        toUpperCase(save);
+
+        // evaluate response
+        if (save[0] == '\n' || save[0] == Y)
+        {
+            // Save the character
+            return 1;
+        }
+        else if (save[0] == N)
+        {
+            // User entered 'y' or 'n'
+            return 0;
+        }
+        else
+        {
+            // Invalid input, ask again
+            printf("Invalid input. Please enter 'y' or 'n'.\n");
+        }
     }
 }
 
@@ -159,6 +163,7 @@ struct PlayerCharacter *initialize_session()
     {
         pc = new_character();
     }
+
     return pc;
 }
 
@@ -167,7 +172,6 @@ int main()
     struct PlayerCharacter *pc = initialize_session();
     print_character(pc);
     command_listener(pc);
-    
-    request_save(pc); // ask to save on exit
+
     return 0;
 }

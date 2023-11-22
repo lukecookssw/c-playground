@@ -5,6 +5,9 @@
 
 #include "memory_utils.h"
 
+const char Y = 'Y';
+const char N = 'N';
+
 void toUpperCase(char* name)
 {
     
