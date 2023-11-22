@@ -66,36 +66,6 @@ void print_character(struct PlayerCharacter *pc)
     printf("Charisma\t%d\t%c%d\n", pc->charisma.attr_val, pc->charisma.attr_mod >= 0 ? '+' : '-', abs(pc->charisma.attr_mod));
 }
 
-int request_save(struct PlayerCharacter *pc)
-{
-    char save[3]; // buffer to hold the input
-
-    while (1)
-    {
-        // ask the user if they want to save
-        printf("Would you like to save your character? (Y/n) ");
-        fgets(save, sizeof(save), stdin);
-        toUpperCase(save);
-
-        // evaluate response
-        if (save[0] == '\n' || save[0] == Y)
-        {
-            // Save the character
-            return 1;
-        }
-        else if (save[0] == N)
-        {
-            // User entered 'y' or 'n'
-            return 0;
-        }
-        else
-        {
-            // Invalid input, ask again
-            printf("Invalid input. Please enter 'y' or 'n'.\n");
-        }
-    }
-}
-
 int request_load()
 {
     char load[3]; // buffer to hold the input
