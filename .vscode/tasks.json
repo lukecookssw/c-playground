@@ -2,7 +2,7 @@
     "tasks": [
         {
             "type": "cppbuild",
-            "label": "C/C++: gcc build active file",
+            "label": "build",
             "command": "/usr/bin/gcc",
             "args": [
                 "-fdiagnostics-color=always",
@@ -20,9 +20,10 @@
                 "${workspaceFolder}/utils/file_utils.c",
                 "${workspaceFolder}/utils/string_utils.c",
                 "${workspaceFolder}/utils/save_utils.c",
+                "${workspaceFolder}/commands/command_map.c",
                 
                 "-o",
-                "${fileDirname}/${fileBasenameNoExtension}"
+                "${workspaceFolder}/bin/main"
             ],
             "options": {
                 "cwd": "${fileDirname}"
