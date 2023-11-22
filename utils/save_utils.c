@@ -75,15 +75,33 @@ struct PlayerCharacter* load_character()
         perror("fdopen");
         exit(EXIT_FAILURE);
     }
+
     struct PlayerCharacter* pc = create_player_character(character_file);
 
-    
-    fscanf(fp, "%d", &pc->strength.attr_val);
-    fscanf(fp, "%d", &pc->dexterity.attr_val);
-    fscanf(fp, "%d", &pc->constitution.attr_val);
-    fscanf(fp, "%d", &pc->intelligence.attr_val);
-    fscanf(fp, "%d", &pc->wisdom.attr_val);
-    fscanf(fp, "%d", &pc->charisma.attr_val);
+    int attr_val;
+    fscanf(fp, "%d", &attr_val);
+    updateAttribute(&pc->strength, attr_val);
+
+    // important:
+    // pc is a pointer
+    // pc->strength is a struct
+    // &pc->strength is a pointer to a struct (like tunnelling the pointer I guess?)
+
+
+    fscanf(fp, "%d", &attr_val);
+    updateAttribute(&pc->dexterity, attr_val);
+
+    fscanf(fp, "%d", &attr_val);
+    updateAttribute(&pc->constitution, attr_val);
+
+    fscanf(fp, "%d", &attr_val);
+    updateAttribute(&pc->intelligence, attr_val);
+
+    fscanf(fp, "%d", &attr_val);
+    updateAttribute(&pc->wisdom, attr_val);
+
+    fscanf(fp, "%d", &attr_val);
+    updateAttribute(&pc->charisma, attr_val);
 
     fclose(fp);
 
