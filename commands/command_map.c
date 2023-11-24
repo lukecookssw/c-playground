@@ -41,6 +41,21 @@ void handle_attributes(struct  PlayerCharacter* pc)
     printf("Charisma:       %d\n", pc->charisma.attr_val);
 }
 
+void handle_remove_item(struct PlayerCharacter* pc)
+{
+    // get the item name
+    char item_name[32];
+    printf("Item name: ");
+    fgets(item_name, 32, stdin);
+    strip_newline_end(item_name);
+
+    // copy the item into the player character's inventory
+    remove_item_from_inventory(pc, item_name);
+    
+    printf("%s removed.\n", item_name);
+}
+
+
 void handle_add_item(struct PlayerCharacter* pc)
 {
     // get the item name
@@ -83,6 +98,7 @@ void handle_list_items(struct PlayerCharacter* pc)
 // Define the command handlers
 CommandHandler command_handlers[] = {
     { "add item", handle_add_item },
+    { "remove item", handle_remove_item },
     { "clear", handle_clear },
     { "print", handle_print },
     { "list", handle_list },

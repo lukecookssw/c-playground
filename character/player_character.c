@@ -9,21 +9,21 @@
 #include "item.h"
 
 
-static int player_inventory_count(struct  PlayerCharacter *pc)
-{
-    // check to see if there's any inventory at all
-    if (pc->ptr_inventory == NULL)
-    {
-        return 0;
-    }
+// static int player_inventory_count(struct  PlayerCharacter *pc)
+// {
+//     // check to see if there's any inventory at all
+//     if (pc->ptr_inventory == NULL)
+//     {
+//         return 0;
+//     }
 
-    int count = 0;
-    while (pc->ptr_inventory[count].name[0] != '\0')
-    {
-        count++;
-    }
-    return count;
-}
+//     int count = 0;
+//     while (pc->ptr_inventory[count].name[0] != '\0')
+//     {
+//         count++;
+//     }
+//     return count;
+// }
 
 // Comparison function for qsort
 int compareItems(const void *a, const void *b) {
@@ -59,7 +59,59 @@ void add_item_to_inventory(struct PlayerCharacter* pc, struct Item* item)
     qsort(pc->ptr_inventory, pc->inventory_count, sizeof(struct Item), compareItems);
 }
 
+static int find_item_index(struct PlayerCharacter* pc, char* item_name)
+{
+    int result = -1;
+    // check to see if there's any inventory at all
+    if (pc->ptr_inventory == NULL)
+    {
+        return -1;
+    }
+    char* item_name_lower = toLowerCaseCopy(item_name);
+    // find the item in the inventory
+    int i = 0;
+    while (pc->ptr_inventory[i].name[0] != '\0')
+    {
+        char* inventory_item_name_lower = toLowerCaseCopy(pc->ptr_inventory[i].name);
+        if (strcmp(inventory_item_name_lower, item_name_lower) == 0)
+        {
 
+            result = i;
+        }
+        i++;
+        
+        // tidy up
+        free(inventory_item_name_lower);
+        if (result != -1)
+        {
+            break;
+        }
+    }
+    free(item_name_lower);
+    return result;
+}
+
+void remove_item_from_inventory(struct PlayerCharacter* pc, char* item_name)
+{
+    struct Item* inventory = pc->ptr_inventory;
+
+    // find the item in the inventory
+    int i = find_item_index(pc, item_name);
+    if (i == -1)
+    {
+        printf("No item with name %s found in inventory\n", item_name);
+        return;
+    }
+
+    memmove(
+        inventory + i,                                          // dest
+        inventory + i + 1,                                      // source
+        sizeof(struct Item) * (pc->inventory_count - i)         // size
+        );
+    inventory = safe_realloc(inventory, sizeof(struct Item) * (pc->inventory_count - 1));
+    pc->inventory_count--;
+
+}
 
 void free_player_character(struct PlayerCharacter* pc)
 {
