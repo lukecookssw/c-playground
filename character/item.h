@@ -10,8 +10,9 @@ typedef enum {
     WRISTS_HANDS,
     FINGER_ONE,
     FINGER_TWO,
-    MAIN_HAND,
-    OFF_HAND,
+    WEAPON,
+    SHIELD,
+    POTION,
     NO_SLOT // for items that don't go in a specific slot
 } ItemSlot;
 
@@ -27,5 +28,6 @@ struct Item {
 
 // functions
 struct Item* create_item(char* name, char* description, int weight, int value, ItemSlot slot);
+void destroy_item(struct Item* item);
 
 #endif // PLAYER_CHARACTER_H

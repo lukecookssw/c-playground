@@ -21,3 +21,8 @@ struct Item* create_item(char* name, char* description, int weight, int value, I
     
     return item;
 }
+
+void destroy_item(struct Item* item)
+{
+    free(item);
+}

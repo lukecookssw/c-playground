@@ -7,6 +7,7 @@
 #include "utils/save_utils.h"
 #include "utils/string_utils.h"
 #include "commands/command_map.h"
+#include "data/item_list.h"
 
 
 void request_attr(char *attr_name, int *attr_val)
@@ -54,26 +55,7 @@ struct PlayerCharacter *new_character()
     return pc;
 }
 
-void print_character(struct PlayerCharacter *pc)
-{
-    printf("Name: %s\n", pc->name);
-    printf("Attribute\tScore\tModifier\n");
-    printf("Strength\t%d\t%c%d\n", pc->strength.attr_val, pc->strength.attr_mod >= 0 ? '+' : '-', abs(pc->strength.attr_mod));
-    printf("Dexterity\t%d\t%c%d\n", pc->dexterity.attr_val, pc->dexterity.attr_mod >= 0 ? '+' : '-', abs(pc->dexterity.attr_mod));
-    printf("Constitution\t%d\t%c%d\n", pc->constitution.attr_val, pc->constitution.attr_mod >= 0 ? '+' : '-', abs(pc->constitution.attr_mod));
-    printf("Intelligence\t%d\t%c%d\n", pc->intelligence.attr_val, pc->intelligence.attr_mod >= 0 ? '+' : '-', abs(pc->intelligence.attr_mod));
-    printf("Wisdom\t\t%d\t%c%d\n", pc->wisdom.attr_val, pc->wisdom.attr_mod >= 0 ? '+' : '-', abs(pc->wisdom.attr_mod));
-    printf("Charisma\t%d\t%c%d\n", pc->charisma.attr_val, pc->charisma.attr_mod >= 0 ? '+' : '-', abs(pc->charisma.attr_mod));
 
-    // print items in inventory
-    printf("Inventory:\n");
-    int i = 0;
-    while (pc->ptr_inventory[i].name[0] != '\0')
-    {
-        printf("%s - %dgp\n", pc->ptr_inventory[i].name, pc->ptr_inventory[i].value);
-        i++;
-    }
-}
 
 int request_load()
 {
@@ -130,6 +112,12 @@ void command_listener(struct PlayerCharacter *pc)
     }
 }
 
+void load_data()
+{
+    // load the item list
+    load_item_list();
+}
+
 struct PlayerCharacter *initialize_session()
 {
     struct PlayerCharacter *pc;
@@ -148,6 +136,7 @@ struct PlayerCharacter *initialize_session()
 
 int main()
 {
+    load_data();
     struct PlayerCharacter *pc = initialize_session();
     print_character(pc);
     command_listener(pc);

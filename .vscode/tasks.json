@@ -22,6 +22,9 @@
                 "${workspaceFolder}/utils/string_utils.c",
                 "${workspaceFolder}/utils/save_utils.c",
                 "${workspaceFolder}/commands/command_map.c",
+
+                // data
+                "${workspaceFolder}/data/item_list.c",
                 
                 "-o",
                 "${workspaceFolder}/bin/main"
