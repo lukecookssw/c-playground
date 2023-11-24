@@ -7,6 +7,7 @@
 #include "utils/save_utils.h"
 #include "utils/string_utils.h"
 #include "commands/command_map.h"
+#include "data/item_list.h"
 
 
 void request_attr(char *attr_name, int *attr_val)
@@ -54,47 +55,7 @@ struct PlayerCharacter *new_character()
     return pc;
 }
 
-void print_character(struct PlayerCharacter *pc)
-{
-    printf("Name: %s\n", pc->name);
-    printf("Attribute\tScore\tModifier\n");
-    printf("Strength\t%d\t%c%d\n", pc->strength.attr_val, pc->strength.attr_mod >= 0 ? '+' : '-', abs(pc->strength.attr_mod));
-    printf("Dexterity\t%d\t%c%d\n", pc->dexterity.attr_val, pc->dexterity.attr_mod >= 0 ? '+' : '-', abs(pc->dexterity.attr_mod));
-    printf("Constitution\t%d\t%c%d\n", pc->constitution.attr_val, pc->constitution.attr_mod >= 0 ? '+' : '-', abs(pc->constitution.attr_mod));
-    printf("Intelligence\t%d\t%c%d\n", pc->intelligence.attr_val, pc->intelligence.attr_mod >= 0 ? '+' : '-', abs(pc->intelligence.attr_mod));
-    printf("Wisdom\t\t%d\t%c%d\n", pc->wisdom.attr_val, pc->wisdom.attr_mod >= 0 ? '+' : '-', abs(pc->wisdom.attr_mod));
-    printf("Charisma\t%d\t%c%d\n", pc->charisma.attr_val, pc->charisma.attr_mod >= 0 ? '+' : '-', abs(pc->charisma.attr_mod));
-}
 
-int request_save(struct PlayerCharacter *pc)
-{
-    char save[3]; // buffer to hold the input
-
-    while (1)
-    {
-        // ask the user if they want to save
-        printf("Would you like to save your character? (Y/n) ");
-        fgets(save, sizeof(save), stdin);
-        toUpperCase(save);
-
-        // evaluate response
-        if (save[0] == '\n' || save[0] == Y)
-        {
-            // Save the character
-            return 1;
-        }
-        else if (save[0] == N)
-        {
-            // User entered 'y' or 'n'
-            return 0;
-        }
-        else
-        {
-            // Invalid input, ask again
-            printf("Invalid input. Please enter 'y' or 'n'.\n");
-        }
-    }
-}
 
 int request_load()
 {
@@ -151,6 +112,12 @@ void command_listener(struct PlayerCharacter *pc)
     }
 }
 
+void load_data()
+{
+    // load the item list
+    load_item_list();
+}
+
 struct PlayerCharacter *initialize_session()
 {
     struct PlayerCharacter *pc;
@@ -169,6 +136,7 @@ struct PlayerCharacter *initialize_session()
 
 int main()
 {
+    load_data();
     struct PlayerCharacter *pc = initialize_session();
     print_character(pc);
     command_listener(pc);

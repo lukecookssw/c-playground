@@ -8,6 +8,19 @@
 const char Y = 'Y';
 const char N = 'N';
 
+void strip_newline_end(char* str)
+{
+   
+    // find the last newline character
+    char* newline = strrchr(str, '\n');
+
+    // if newline is found, overwrite it with a null terminator
+    if (newline != NULL)
+    {
+        *newline = '\0';
+    }
+}
+
 void toUpperCase(char* name)
 {
     

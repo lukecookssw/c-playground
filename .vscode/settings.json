@@ -4,6 +4,7 @@
         "memory_utils.h": "c",
         "string.h": "c",
         "typeinfo": "c",
-        "player_character.h": "c"
+        "player_character.h": "c",
+        "stdlib.h": "c"
     }
 }

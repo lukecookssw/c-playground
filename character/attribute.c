@@ -13,6 +13,11 @@ static int calculateModifier(struct Attribute *attr)
 
 void updateAttribute(struct Attribute *attribute, int val)
 {
+    if (attribute == NULL)
+    {
+        printf("attribute is null\n");
+        return;
+    }
     // update the value
     attribute->attr_val = val;
 
