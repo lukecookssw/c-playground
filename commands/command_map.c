@@ -10,6 +10,7 @@ void handle_list(struct PlayerCharacter* pc)
 {
     // list all the command names
     int i = 0;
+    printf("Available commands:\n");
     while (command_handlers[i].name != NULL)
     {
         printf("%s\n", command_handlers[i].name);

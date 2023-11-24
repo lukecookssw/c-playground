@@ -4,7 +4,7 @@
 #include "../utils/memory_utils.h"
 #include <string.h>
 
-struct Item* create_item(char* name, char* description, int weight, int value)
+struct Item* create_item(char* name, char* description, int weight, int value, ItemSlot slot)
 {
     struct Item* item = safe_malloc(sizeof(struct Item));
 
@@ -17,6 +17,7 @@ struct Item* create_item(char* name, char* description, int weight, int value)
     item->weight = weight;
     item->value = value;
     item->equipped = 0;
+    item->slot = slot;
     
     return item;
 }

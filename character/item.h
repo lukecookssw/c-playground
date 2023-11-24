@@ -26,6 +26,6 @@ struct Item {
 };
 
 // functions
-struct Item* create_item(char* name, char* description, int weight, int value);
+struct Item* create_item(char* name, char* description, int weight, int value, ItemSlot slot);
 
 #endif // PLAYER_CHARACTER_H
