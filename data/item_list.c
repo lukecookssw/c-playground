@@ -6,7 +6,7 @@
 #include "../utils/string_utils.h"
 
 // create static array of items
-struct Item* items[10];
+struct Item* items[11];
 
 // create items
 void load_item_list()
@@ -21,6 +21,7 @@ void load_item_list()
     items[7] = create_item("Potion of Fire Breath", "A potion of fire breath", 1, 100, POTION);
     items[8] = create_item("Potion of Invisibility", "A potion of invisibility", 1, 100, POTION);
     items[9] = create_item("Potion of Poison", "A potion of poison", 1, 100, POTION);
+    items[10] = create_item("Dagga", "A dagga", 1, 50, WEAPON);
 }
 
 // destroy items

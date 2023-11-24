@@ -25,6 +25,11 @@ static int player_inventory_count(struct  PlayerCharacter *pc)
     return count;
 }
 
+// Comparison function for qsort
+int compareItems(const void *a, const void *b) {
+    return strcmp(((struct Item*)a)->name, ((struct Item*)b)->name);
+}
+
 void add_item_to_inventory(struct PlayerCharacter* pc, struct Item* item)
 {
     // Increase the size of the ptr_inventory array
@@ -49,6 +54,9 @@ void add_item_to_inventory(struct PlayerCharacter* pc, struct Item* item)
     // Copy the item into the ptr_inventory array
     pc->ptr_inventory[count] = *item_copy;
     pc->inventory_count++;
+
+    // sort
+    qsort(pc->ptr_inventory, pc->inventory_count, sizeof(struct Item), compareItems);
 }
 
 
@@ -77,7 +85,7 @@ struct PlayerCharacter* create_player_character(char* name)
 void print_character_inventory(struct PlayerCharacter *pc)
 {
     printf("-------------------Inventory---------------------\n");
-    printf("Name                           | Weight | Value |\n");
+    printf("Name                           | Weight | Value  \n");
     if (pc->ptr_inventory == NULL)
     {
         printf("Empty :(\n");
@@ -94,7 +102,8 @@ void print_character_inventory(struct PlayerCharacter *pc)
 
 void print_character(struct PlayerCharacter *pc)
 {
-    printf("Name: %s\n", pc->name);
+    printf("-------------------------------------------------\n");
+    printf("Name: %s\n\n", pc->name);
     printf("Attribute\tScore\tModifier\n");
     printf("Strength\t%d\t%c%d\n", pc->strength.attr_val, pc->strength.attr_mod >= 0 ? '+' : '-', abs(pc->strength.attr_mod));
     printf("Dexterity\t%d\t%c%d\n", pc->dexterity.attr_val, pc->dexterity.attr_mod >= 0 ? '+' : '-', abs(pc->dexterity.attr_mod));

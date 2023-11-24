@@ -45,7 +45,7 @@ void handle_add_item(struct PlayerCharacter* pc)
 {
     // get the item name
     char item_name[32];
-    printf("Item name?");
+    printf("Item name: ");
     fgets(item_name, 32, stdin);
     strip_newline_end(item_name);
 
