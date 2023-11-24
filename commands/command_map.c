@@ -82,6 +82,7 @@ void handle_clear(struct PlayerCharacter* pc)
 {
     // clear the screen
     system("clear");
+    handle_print(pc);
 }
 
 void handle_print(struct PlayerCharacter* pc)

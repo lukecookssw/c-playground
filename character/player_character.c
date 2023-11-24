@@ -9,22 +9,6 @@
 #include "item.h"
 
 
-// static int player_inventory_count(struct  PlayerCharacter *pc)
-// {
-//     // check to see if there's any inventory at all
-//     if (pc->ptr_inventory == NULL)
-//     {
-//         return 0;
-//     }
-
-//     int count = 0;
-//     while (pc->ptr_inventory[count].name[0] != '\0')
-//     {
-//         count++;
-//     }
-//     return count;
-// }
-
 // Comparison function for qsort
 int compareItems(const void *a, const void *b) {
     return strcmp(((struct Item*)a)->name, ((struct Item*)b)->name);
@@ -102,7 +86,14 @@ void remove_item_from_inventory(struct PlayerCharacter* pc, char* item_name)
         printf("No item with name %s found in inventory\n", item_name);
         return;
     }
-
+    
+    if(pc->inventory_count == 1)
+    {
+        free(pc->ptr_inventory);
+        pc->inventory_count = 0;
+        return;
+    }
+    
     memmove(
         inventory + i,                                          // dest
         inventory + i + 1,                                      // source

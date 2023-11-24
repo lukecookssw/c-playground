@@ -80,6 +80,8 @@ int request_load()
         {
             // Invalid input, ask again
             printf("Invalid input. Please enter 'y' or 'n'.\n");
+            while (getchar() != '\n')
+                ;
         }
     }
 }
@@ -108,6 +110,9 @@ void command_listener(struct PlayerCharacter *pc)
         if (command_handlers[i].name == NULL)
         {
             printf("Invalid command. Please enter a valid command.\n");
+            // clear the buffer
+            while (getchar() != '\n')
+                ;
         }
     }
 }
