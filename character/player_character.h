@@ -20,6 +20,7 @@ struct PlayerCharacter
 
 // functions
 void print_character(struct PlayerCharacter *pc);
+void print_character_inventory(struct PlayerCharacter *pc);
 struct PlayerCharacter* create_player_character(char* name);
 void free_player_character(struct PlayerCharacter* pc);
 void add_item_to_inventory(struct PlayerCharacter* pc, struct Item* item);

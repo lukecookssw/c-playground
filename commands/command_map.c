@@ -59,7 +59,14 @@ void handle_add_item(struct PlayerCharacter* pc)
     
     // copy the item into the player character's inventory
     add_item_to_inventory(pc, item);
+    
+    printf("1 %s added to inventory!\n", item->name);
+}
 
+void handle_clear(struct PlayerCharacter* pc)
+{
+    // clear the screen
+    system("clear");
 }
 
 void handle_print(struct PlayerCharacter* pc)
@@ -76,6 +83,7 @@ void handle_list_items(struct PlayerCharacter* pc)
 // Define the command handlers
 CommandHandler command_handlers[] = {
     { "add item", handle_add_item },
+    { "clear", handle_clear },
     { "print", handle_print },
     { "list", handle_list },
     { "list items", handle_list_items },

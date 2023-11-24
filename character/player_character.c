@@ -76,6 +76,24 @@ struct PlayerCharacter* create_player_character(char* name)
     return pc;
 }
 
+void print_character_inventory(struct PlayerCharacter *pc)
+{
+    printf("-------------------Inventory---------------------\n");
+    printf("Name                           | Weight | Value |\n");
+    if (pc->ptr_inventory == NULL)
+    {
+        printf("Empty :(\n");
+        return;
+    }
+    int i = 0;
+    while (pc->ptr_inventory[i].name[0] != '\0')
+    {
+        printf("%-30s | %-6d | %-6d\n", pc->ptr_inventory[i].name, pc->ptr_inventory[i].weight, pc->ptr_inventory[i].value);
+        i++;
+    }
+    printf("-------------------------------------------------\n");
+}
+
 void print_character(struct PlayerCharacter *pc)
 {
     printf("Name: %s\n", pc->name);
@@ -87,17 +105,5 @@ void print_character(struct PlayerCharacter *pc)
     printf("Wisdom\t\t%d\t%c%d\n", pc->wisdom.attr_val, pc->wisdom.attr_mod >= 0 ? '+' : '-', abs(pc->wisdom.attr_mod));
     printf("Charisma\t%d\t%c%d\n", pc->charisma.attr_val, pc->charisma.attr_mod >= 0 ? '+' : '-', abs(pc->charisma.attr_mod));
 
-    // print items in inventory
-    printf("Inventory:\n");
-    if (pc->ptr_inventory == NULL)
-    {
-        printf("Empty\n");
-        return;
-    }
-    int i = 0;
-    while (pc->ptr_inventory[i].name[0] != '\0')
-    {
-        printf("%s - %dgp\n", pc->ptr_inventory[i].name, pc->ptr_inventory[i].value);
-        i++;
-    }
+    print_character_inventory(pc);
 }
