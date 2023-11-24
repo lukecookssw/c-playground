@@ -16,6 +16,7 @@ struct PlayerCharacter
     struct Attribute wisdom;
     struct Attribute charisma;
     struct Item* ptr_inventory;
+    int inventory_count;
 };
 
 // functions

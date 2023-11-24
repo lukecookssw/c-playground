@@ -28,8 +28,8 @@ static int player_inventory_count(struct  PlayerCharacter *pc)
 void add_item_to_inventory(struct PlayerCharacter* pc, struct Item* item)
 {
     // Increase the size of the ptr_inventory array
-    int count = player_inventory_count(pc);
-    struct Item* new_ptr_inventory = realloc(pc->ptr_inventory, sizeof(struct Item) * (count + 1));
+    int count = pc->inventory_count;
+    struct Item* new_ptr_inventory = realloc(pc->ptr_inventory, sizeof(struct Item) * (pc->inventory_count + 1));
     
     // Check if realloc was successful
     if (new_ptr_inventory == NULL)
@@ -48,6 +48,7 @@ void add_item_to_inventory(struct PlayerCharacter* pc, struct Item* item)
 
     // Copy the item into the ptr_inventory array
     pc->ptr_inventory[count] = *item_copy;
+    pc->inventory_count++;
 }
 
 
@@ -65,13 +66,10 @@ struct PlayerCharacter* create_player_character(char* name)
 {
     // allocate the memory
     struct PlayerCharacter* pc = safe_malloc(sizeof(struct PlayerCharacter));
+    pc->inventory_count = 0;
     
     // set the name
     strcpy(pc->name, toUpperCaseCopy(name));
-
-    struct Item* default_item = create_item("default item", "this is a default item", 1, 1, NO_SLOT);
-    // add a single default item to the inventory
-    add_item_to_inventory(pc, default_item);
 
     return pc;
 }
