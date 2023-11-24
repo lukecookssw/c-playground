@@ -8,7 +8,7 @@
 #include "../data/item_list.h"
 #include "command_map.h"
 
-void handle_list(struct PlayerCharacter* pc)
+void handle_list(struct PlayerCharacter *pc)
 {
     // list all the command names
     int i = 0;
@@ -21,18 +21,20 @@ void handle_list(struct PlayerCharacter* pc)
 }
 
 // Define the command handlers
-void handle_save(struct PlayerCharacter* pc) {
+void handle_save(struct PlayerCharacter *pc)
+{
     quicksave_character(pc);
 }
 
-void handle_exit(struct PlayerCharacter* pc) {
+void handle_exit(struct PlayerCharacter *pc)
+{
     save_character(pc);
     exit(0);
 }
 
-void handle_attributes(struct  PlayerCharacter* pc)
+void handle_attributes(struct PlayerCharacter *pc)
 {
-    
+
     printf("Strength:       %d\n", pc->strength.attr_val);
     printf("Dexterity:      %d\n", pc->dexterity.attr_val);
     printf("Constitution:   %d\n", pc->constitution.attr_val);
@@ -41,7 +43,7 @@ void handle_attributes(struct  PlayerCharacter* pc)
     printf("Charisma:       %d\n", pc->charisma.attr_val);
 }
 
-void handle_remove_item(struct PlayerCharacter* pc)
+void handle_remove_item(struct PlayerCharacter *pc)
 {
     // get the item name
     char item_name[32];
@@ -51,12 +53,11 @@ void handle_remove_item(struct PlayerCharacter* pc)
 
     // copy the item into the player character's inventory
     remove_item_from_inventory(pc, item_name);
-    
+
     printf("%s removed.\n", item_name);
 }
 
-
-void handle_add_item(struct PlayerCharacter* pc)
+void handle_add_item(struct PlayerCharacter *pc)
 {
     // get the item name
     char item_name[32];
@@ -65,48 +66,46 @@ void handle_add_item(struct PlayerCharacter* pc)
     strip_newline_end(item_name);
 
     // look up item in item_list
-    struct Item* item = get_item_by_name(item_name);
+    struct Item *item = get_item_by_name(item_name);
     if (item == NULL)
     {
         printf("Item not found\n");
         return;
     }
-    
+
     // copy the item into the player character's inventory
     add_item_to_inventory(pc, item);
-    
+
     printf("1 %s added to inventory!\n", item->name);
 }
 
-void handle_clear(struct PlayerCharacter* pc)
+void handle_clear(struct PlayerCharacter *pc)
 {
     // clear the screen
     system("clear");
     handle_print(pc);
 }
 
-void handle_print(struct PlayerCharacter* pc)
+void handle_print(struct PlayerCharacter *pc)
 {
     print_character(pc);
 }
 
-void handle_list_items(struct PlayerCharacter* pc)
+void handle_list_items(struct PlayerCharacter *pc)
 {
     list_items();
 }
 
-
 // Define the command handlers
 CommandHandler command_handlers[] = {
-    { "add item", handle_add_item },
-    { "remove item", handle_remove_item },
-    { "clear", handle_clear },
-    { "print", handle_print },
-    { "list", handle_list },
-    { "list items", handle_list_items },
-    { "save", handle_save },
-    { "stats", handle_attributes },
-    { "attributes", handle_attributes },
-    { "exit", handle_exit },
-    { NULL, NULL }
-};
+    {"add item", handle_add_item},
+    {"remove item", handle_remove_item},
+    {"clear", handle_clear},
+    {"print", handle_print},
+    {"list", handle_list},
+    {"list items", handle_list_items},
+    {"save", handle_save},
+    {"stats", handle_attributes},
+    {"attributes", handle_attributes},
+    {"exit", handle_exit},
+    {NULL, NULL}};

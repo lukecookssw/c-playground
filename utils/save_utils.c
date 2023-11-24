@@ -142,7 +142,7 @@ void load_inventory(FILE *fp, struct PlayerCharacter *pc)
     }
 }
 
-FILE* load_file(char* file_name)
+FILE *load_file(char *file_name)
 {
     char save_dir[] = "save_files/";
 
@@ -204,7 +204,7 @@ struct PlayerCharacter *load_character()
     strip_newline_end(character_file);
     toLowerCase(character_file); // lower case the filename
 
-    FILE* fp = load_file(character_file);
+    FILE *fp = load_file(character_file);
 
     struct PlayerCharacter *pc = create_player_character(character_file);
 

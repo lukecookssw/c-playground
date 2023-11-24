@@ -8,11 +8,11 @@
 const char Y = 'Y';
 const char N = 'N';
 
-void strip_newline_end(char* str)
+void strip_newline_end(char *str)
 {
-   
+
     // find the last newline character
-    char* newline = strrchr(str, '\n');
+    char *newline = strrchr(str, '\n');
 
     // if newline is found, overwrite it with a null terminator
     if (newline != NULL)
@@ -21,22 +21,19 @@ void strip_newline_end(char* str)
     }
 }
 
-void toUpperCase(char* name)
+void toUpperCase(char *name)
 {
-    
-
-    // convert name to all uppercase
-    for (int i = 0; i < strlen(name); i++) 
+    // convert string to all uppercase
+    for (int i = 0; i < strlen(name); i++)
     {
         name[i] = toupper(name[i]);
     }
-        
 }
 
-char* toUpperCaseCopy(char* str)
+char *toUpperCaseCopy(char *str)
 {
     // allocate memory for the new string
-    char* result = safe_malloc(strlen(str) + 1);
+    char *result = safe_malloc(strlen(str) + 1);
 
     // copy the string
     strcpy(result, str);
@@ -45,18 +42,18 @@ char* toUpperCaseCopy(char* str)
     return result;
 }
 
-void toLowerCase(char* str)
+void toLowerCase(char *str)
 {
-    // convert name to all uppercase
-    for (int i = 0; i < strlen(str); i++) 
+    // convert string to all lowercase
+    for (int i = 0; i < strlen(str); i++)
     {
         str[i] = tolower(str[i]);
     }
 }
-char* toLowerCaseCopy(char* str)
+char *toLowerCaseCopy(char *str)
 {
     // allocate memory for the new string
-    char* result = safe_malloc(strlen(str) + 1);
+    char *result = safe_malloc(strlen(str) + 1);
 
     // copy the string
     strcpy(result, str);
@@ -64,4 +61,3 @@ char* toLowerCaseCopy(char* str)
     // return the new string
     return result;
 }
-

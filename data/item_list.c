@@ -6,7 +6,7 @@
 #include "../utils/string_utils.h"
 
 // create static array of items
-struct Item* items[11];
+struct Item *items[11];
 
 // create items
 void load_item_list()
@@ -31,7 +31,7 @@ void destroy_items()
     {
         return;
     }
-    
+
     int count = sizeof(items) / sizeof(items[0]);
     for (int i = 0; i < count; i++)
     {
@@ -48,21 +48,21 @@ void list_items()
     }
 }
 
-struct Item* get_item_by_name(char* search)
+struct Item *get_item_by_name(char *search)
 {
-    struct Item* result = NULL;
-    char* search_lower = toLowerCaseCopy(search);
+    struct Item *result = NULL;
+    char *search_lower = toLowerCaseCopy(search);
     int count = sizeof(items) / sizeof(items[0]);
     for (int i = 0; i < count; i++)
     {
         // compare the item name to the name passed in, ignoring case
-        char* item_name_lower = toLowerCaseCopy(items[i]->name);
+        char *item_name_lower = toLowerCaseCopy(items[i]->name);
 
         if (strcmp(item_name_lower, search_lower) == 0)
         {
             result = items[i];
         }
-        
+
         // tidy up and maybe break the loop
         free(item_name_lower);
         if (result != NULL)
@@ -70,7 +70,7 @@ struct Item* get_item_by_name(char* search)
             break;
         }
     }
-    
+
     free(search_lower);
 
     return result;

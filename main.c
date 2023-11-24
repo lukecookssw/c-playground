@@ -9,7 +9,6 @@
 #include "commands/command_map.h"
 #include "data/item_list.h"
 
-
 void request_attr(char *attr_name, int *attr_val)
 {
     int minVal = 6;
@@ -55,8 +54,6 @@ struct PlayerCharacter *new_character()
     return pc;
 }
 
-
-
 int request_load()
 {
     char load[3]; // buffer to hold the input
@@ -80,6 +77,8 @@ int request_load()
         {
             // Invalid input, ask again
             printf("Invalid input. Please enter 'y' or 'n'.\n");
+
+            // clear the buffer
             while (getchar() != '\n')
                 ;
         }

@@ -8,18 +8,18 @@
 #include "player_character.h"
 #include "item.h"
 
-
 // Comparison function for qsort
-int compareItems(const void *a, const void *b) {
-    return strcmp(((struct Item*)a)->name, ((struct Item*)b)->name);
+int compareItems(const void *a, const void *b)
+{
+    return strcmp(((struct Item *)a)->name, ((struct Item *)b)->name);
 }
 
-void add_item_to_inventory(struct PlayerCharacter* pc, struct Item* item)
+void add_item_to_inventory(struct PlayerCharacter *pc, struct Item *item)
 {
     // Increase the size of the ptr_inventory array
     int count = pc->inventory_count;
-    struct Item* new_ptr_inventory = realloc(pc->ptr_inventory, sizeof(struct Item) * (pc->inventory_count + 1));
-    
+    struct Item *new_ptr_inventory = safe_realloc(pc->ptr_inventory, sizeof(struct Item) * (pc->inventory_count + 1));
+
     // Check if realloc was successful
     if (new_ptr_inventory == NULL)
     {
@@ -32,7 +32,7 @@ void add_item_to_inventory(struct PlayerCharacter* pc, struct Item* item)
     pc->ptr_inventory = new_ptr_inventory;
 
     // create a copy of the item to store in the player's inventory
-    struct Item* item_copy = safe_malloc(sizeof(struct Item));
+    struct Item *item_copy = safe_malloc(sizeof(struct Item));
     memcpy(item_copy, item, sizeof(struct Item));
 
     // Copy the item into the ptr_inventory array
@@ -40,10 +40,14 @@ void add_item_to_inventory(struct PlayerCharacter* pc, struct Item* item)
     pc->inventory_count++;
 
     // sort
-    qsort(pc->ptr_inventory, pc->inventory_count, sizeof(struct Item), compareItems);
+    qsort(
+        pc->ptr_inventory,
+        pc->inventory_count,
+        sizeof(struct Item),
+        compareItems);
 }
 
-static int find_item_index(struct PlayerCharacter* pc, char* item_name)
+static int find_item_index(struct PlayerCharacter *pc, char *item_name)
 {
     int result = -1;
     // check to see if there's any inventory at all
@@ -51,19 +55,18 @@ static int find_item_index(struct PlayerCharacter* pc, char* item_name)
     {
         return -1;
     }
-    char* item_name_lower = toLowerCaseCopy(item_name);
+    char *item_name_lower = toLowerCaseCopy(item_name);
     // find the item in the inventory
     int i = 0;
     while (pc->ptr_inventory[i].name[0] != '\0')
     {
-        char* inventory_item_name_lower = toLowerCaseCopy(pc->ptr_inventory[i].name);
+        char *inventory_item_name_lower = toLowerCaseCopy(pc->ptr_inventory[i].name);
         if (strcmp(inventory_item_name_lower, item_name_lower) == 0)
         {
-
             result = i;
         }
         i++;
-        
+
         // tidy up
         free(inventory_item_name_lower);
         if (result != -1)
@@ -75,9 +78,9 @@ static int find_item_index(struct PlayerCharacter* pc, char* item_name)
     return result;
 }
 
-void remove_item_from_inventory(struct PlayerCharacter* pc, char* item_name)
+void remove_item_from_inventory(struct PlayerCharacter *pc, char *item_name)
 {
-    struct Item* inventory = pc->ptr_inventory;
+    struct Item *inventory = pc->ptr_inventory;
 
     // find the item in the inventory
     int i = find_item_index(pc, item_name);
@@ -86,25 +89,24 @@ void remove_item_from_inventory(struct PlayerCharacter* pc, char* item_name)
         printf("No item with name %s found in inventory\n", item_name);
         return;
     }
-    
-    if(pc->inventory_count == 1)
+
+    if (pc->inventory_count == 1)
     {
         free(pc->ptr_inventory);
         pc->inventory_count = 0;
         return;
     }
-    
+
     memmove(
-        inventory + i,                                          // dest
-        inventory + i + 1,                                      // source
-        sizeof(struct Item) * (pc->inventory_count - i)         // size
-        );
+        inventory + i,                                  // dest
+        inventory + i + 1,                              // source
+        sizeof(struct Item) * (pc->inventory_count - i) // size
+    );
     inventory = safe_realloc(inventory, sizeof(struct Item) * (pc->inventory_count - 1));
     pc->inventory_count--;
-
 }
 
-void free_player_character(struct PlayerCharacter* pc)
+void free_player_character(struct PlayerCharacter *pc)
 {
     // free the inventory
     free(pc->ptr_inventory);
@@ -113,12 +115,12 @@ void free_player_character(struct PlayerCharacter* pc)
     free(pc);
 }
 
-struct PlayerCharacter* create_player_character(char* name)
+struct PlayerCharacter *create_player_character(char *name)
 {
     // allocate the memory
-    struct PlayerCharacter* pc = safe_malloc(sizeof(struct PlayerCharacter));
+    struct PlayerCharacter *pc = safe_malloc(sizeof(struct PlayerCharacter));
     pc->inventory_count = 0;
-    
+
     // set the name
     strcpy(pc->name, toUpperCaseCopy(name));
 
