@@ -11,7 +11,7 @@ static int calculateModifier(struct Attribute *attr)
     attr->attr_mod = (attr->attr_val - 10) / 2;
 }
 
-void updateAttribute(struct Attribute *attribute, int val)
+void updateAttribute(struct Attribute *attribute, unsigned short val)
 {
     if (attribute == NULL)
     {

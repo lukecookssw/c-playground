@@ -9,51 +9,6 @@
 #include "commands/command_map.h"
 #include "data/item_list.h"
 
-void request_attr(char *attr_name, int *attr_val)
-{
-    int minVal = 6;
-    int maxVal = 18;
-    printf("What is your character's %s score? ", attr_name);
-    while (scanf("%d", attr_val) != 1 || *attr_val < minVal || *attr_val > maxVal)
-    {
-        while (getchar() != '\n')
-            ; // clear the input buffer
-        printf("Invalid input. Enter a number between %d and %d: ", minVal, maxVal);
-    }
-    while (getchar() != '\n')
-        ; // consume the newline character left by scanf
-}
-
-struct PlayerCharacter *new_character()
-{
-    // ask the user to type in their character's name
-    char name[32];
-    printf("What is your character's name? ");
-    fgets(name, sizeof(name), stdin);
-
-    // get the attribute scores
-    int attrs[6];
-    request_attr("strength", &attrs[0]);
-    request_attr("dexterity", &attrs[1]);
-    request_attr("constitution", &attrs[2]);
-    request_attr("intelligence", &attrs[3]);
-    request_attr("wisdom", &attrs[4]);
-    request_attr("charisma", &attrs[5]);
-
-    // create the player character
-    struct PlayerCharacter *pc = create_player_character(name);
-
-    // set the attributes
-    updateAttribute(&pc->strength, attrs[0]);
-    updateAttribute(&pc->dexterity, attrs[1]);
-    updateAttribute(&pc->constitution, attrs[2]);
-    updateAttribute(&pc->intelligence, attrs[3]);
-    updateAttribute(&pc->wisdom, attrs[4]);
-    updateAttribute(&pc->charisma, attrs[5]);
-
-    return pc;
-}
-
 int request_load()
 {
     char load[3]; // buffer to hold the input
@@ -85,7 +40,7 @@ int request_load()
     }
 }
 
-void command_listener(struct PlayerCharacter *pc)
+void command_listener(struct PlayerCharacter **pc)
 {
     char command[32];
 
@@ -128,13 +83,12 @@ struct PlayerCharacter *initialize_session()
     int load = request_load();
     if (load)
     {
-        pc = load_character();
+        handle_load_character(&pc);
     }
     else
     {
-        pc = new_character();
+        handle_new_character(&pc);
     }
-
     return pc;
 }
 
@@ -142,8 +96,8 @@ int main()
 {
     load_data();
     struct PlayerCharacter *pc = initialize_session();
-    print_character(pc);
-    command_listener(pc);
+    print_character(&pc);
+    command_listener(&pc);
 
     return 0;
 }

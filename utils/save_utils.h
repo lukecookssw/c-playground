@@ -5,9 +5,10 @@
 
 #include "../character/player_character.h"
 
-void save_character(struct PlayerCharacter *pc);
-void quicksave_character(struct PlayerCharacter *pc);
+void save_character(struct PlayerCharacter **pc);
+void quicksave_character(struct PlayerCharacter **pc);
+FILE *load_file(char *file_name);
 
-struct PlayerCharacter *load_character();
+//struct PlayerCharacter *old_load_character();
 
 #endif // SAVE_UTILS_H

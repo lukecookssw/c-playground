@@ -5,6 +5,7 @@
         "string.h": "c",
         "typeinfo": "c",
         "player_character.h": "c",
-        "stdlib.h": "c"
+        "stdlib.h": "c",
+        "attribute.h": "c"
     }
 }

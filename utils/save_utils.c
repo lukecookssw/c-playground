@@ -43,24 +43,24 @@ int confirm_save()
     }
 }
 
-void write_attrs(FILE *fp, struct PlayerCharacter *pc)
+void write_attrs(FILE *fp, struct PlayerCharacter **pc)
 {
-    fprintf(fp, "%d\n", pc->strength.attr_val);
-    fprintf(fp, "%d\n", pc->dexterity.attr_val);
-    fprintf(fp, "%d\n", pc->constitution.attr_val);
-    fprintf(fp, "%d\n", pc->intelligence.attr_val);
-    fprintf(fp, "%d\n", pc->wisdom.attr_val);
-    fprintf(fp, "%d\n", pc->charisma.attr_val);
+    fprintf(fp, "%d\n", (*pc)->strength.attr_val);
+    fprintf(fp, "%d\n", (*pc)->dexterity.attr_val);
+    fprintf(fp, "%d\n", (*pc)->constitution.attr_val);
+    fprintf(fp, "%d\n", (*pc)->intelligence.attr_val);
+    fprintf(fp, "%d\n", (*pc)->wisdom.attr_val);
+    fprintf(fp, "%d\n", (*pc)->charisma.attr_val);
 }
 
-void write_inventory(FILE *fp, struct PlayerCharacter *pc)
+void write_inventory(FILE *fp, struct PlayerCharacter **pc)
 {
-    if (pc->ptr_inventory == NULL)
+    if ((*pc)->ptr_inventory == NULL)
     {
         return;
     }
     // pointer arithmetic time!
-    struct Item *item = pc->ptr_inventory;
+    struct Item *item = (*pc)->ptr_inventory;
     /*
         Because pointer arithmetic is fucky, "item"
         can actually point beyond the length of
@@ -73,7 +73,7 @@ void write_inventory(FILE *fp, struct PlayerCharacter *pc)
         the size of a dynamic array, so we have to do that
         ourselves...
     */
-    for (int i = 0; i < pc->inventory_count; i++)
+    for (int i = 0; i < (*pc)->inventory_count; i++)
     {
         if (item->name == NULL)
         {
@@ -84,10 +84,10 @@ void write_inventory(FILE *fp, struct PlayerCharacter *pc)
     }
 }
 
-void quicksave_character(struct PlayerCharacter *pc)
+void quicksave_character(struct PlayerCharacter **pc)
 {
     char save_dir[] = "save_files/";
-    char *character_file = toLowerCaseCopy(pc->name);
+    char *character_file = toLowerCaseCopy((*pc)->name);
     strip_newline_end(character_file);
     int allocSize = sizeof(save_dir) + strlen(character_file); // using sizeof() includes the null-terminator so no need for +1
 
@@ -116,7 +116,7 @@ void quicksave_character(struct PlayerCharacter *pc)
     printf("Save successful!\n");
 }
 
-void save_character(struct PlayerCharacter *pc)
+void save_character(struct PlayerCharacter **pc)
 {
     int save = confirm_save();
     if (!save)
@@ -126,7 +126,7 @@ void save_character(struct PlayerCharacter *pc)
     quicksave_character(pc);
 }
 
-void load_inventory(FILE *fp, struct PlayerCharacter *pc)
+void load_inventory(FILE *fp, struct PlayerCharacter **pc)
 {
     char item_name[32];
     while (fgets(item_name, sizeof(item_name), fp) != NULL)
@@ -158,14 +158,15 @@ FILE *load_file(char *file_name)
     if (fd == -1)
     {
         perror("open");
-        exit(EXIT_FAILURE);
+        // exit(EXIT_FAILURE);
+        return NULL;
     }
 
     FILE *fp = fdopen(fd, "r");
     if (fp == NULL)
     {
         perror("fdopen");
-        exit(EXIT_FAILURE);
+        return NULL;
     }
 
     return fp;
@@ -195,24 +196,24 @@ void load_attributes(FILE *fp, struct PlayerCharacter *pc)
     fgetc(fp); // consume the newline character
 }
 
-struct PlayerCharacter *load_character()
-{
-    // get the character name
-    char character_file[32];
-    printf("Character name: ");
-    fgets(character_file, sizeof(character_file), stdin);
-    strip_newline_end(character_file);
-    toLowerCase(character_file); // lower case the filename
+// struct PlayerCharacter *old_load_character()
+// {
+//     // get the character name
+//     char character_file[32];
+//     printf("Character name: ");
+//     fgets(character_file, sizeof(character_file), stdin);
+//     strip_newline_end(character_file);
+//     toLowerCase(character_file); // lower case the filename
 
-    FILE *fp = load_file(character_file);
+//     FILE *fp = load_file(character_file);
 
-    struct PlayerCharacter *pc = create_player_character(character_file);
+//     struct PlayerCharacter *pc = create_player_character(character_file);
 
-    load_attributes(fp, pc);
+//     load_attributes(fp, pc);
 
-    load_inventory(fp, pc);
+//     load_inventory(fp, pc);
 
-    fclose(fp);
+//     fclose(fp);
 
-    return pc;
-}
+//     return pc;
+// }
